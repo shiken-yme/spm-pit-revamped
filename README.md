@@ -1,17 +1,18 @@
-# Tools for Paper Mario: The Thousand Year Door
+# Custom Rel Loader for Super Paper Mario
 
-## Credits
+A project to allow rel files created by PistonMiner's rel tools to be ran in Super Paper Mario. Will eventually include a library to interact with the game with in the rel.
+
+The file "/rel/mod.rel" is loaded from the disc (add with [Riivolution](http://rvlution.net/wiki/Riivolution/) or by IOS patching with [Wiimms ISO Tools](https://wit.wiimm.de/)) and executed during boot by the cheat code given in loader.s (assemble with a tool like [pyiiasmh](https://github.com/JoshuaMKW/pyiiasmh) or [codewrite](https://github.com/TheGag96/CodeWrite))
+
+Currently only supports PAL revision 0.
+
+## Contents
+This contains various tools built for Paper Mario: The Thousand Year Door, some of which are applicable to other GameCube games as well.
+  * rel: Framework for writing code on-top of existing code in Super Paper Mario
+  * elf2rel: Convert from ELF file to REL file
+
+## Original Project Credits
  * Technical assistance and additional reverse engineering by **JasperRLZ**
  * Reverse engineering with focus on the battle system by **Jdaster64**
  * Tool implementation and reverse engineering by **PistonMiner**
  * Debugging assistance and reverse engineering by **Zephiles**
-
-## Contents
-This contains various tools built for Paper Mario: The Thousand Year Door, some of which are applicable to other GameCube games as well.
-  * blender_io_ttyd: Blender exporter for map files
-  * rel: Framework for writing code on-top of existing GameCube games
-  * docs: Various pieces of documentation
-  * elf2rel: Convert from ELF file to REL file
-  * ttydasm: Disassembler for the event command scripting language
-  * gcipack: Pack a file into a GCI file to be loaded off memory card
-  * rellink: REL file linking tool
