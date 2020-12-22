@@ -14,7 +14,6 @@ endif
 include $(DEVKITPPC)/gamecube_rules
 
 export ELF2REL	:=	$(TTYDTOOLS)/bin/elf2rel
-export GCIPACK	:=	python $(TTYDTOOLS)/gcipack/gcipack.py
 
 ifeq ($(VERSION),)
 all: us jp eu
@@ -120,9 +119,7 @@ export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 
 # For REL linking
 export LDFILES		:= $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.ld)))
-export MAPFILE		:= $(CURDIR)/include/ttyd.$(VERSION).lst
-export BANNERFILE	:= $(CURDIR)/banner.raw
-export ICONFILE		:= $(CURDIR)/icon.raw
+export MAPFILE		:= $(CURDIR)/include/spm.$(VERSION).lst
 
 #---------------------------------------------------------------------------------
 # build a list of include paths
@@ -149,7 +146,7 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean_target:
 	@echo clean ... $(VERSION)
-	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).dol $(OUTPUT).rel $(OUTPUT).gci
+	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).dol $(OUTPUT).rel
 
 #---------------------------------------------------------------------------------
 else
@@ -159,7 +156,6 @@ DEPENDS	:=	$(OFILES:.o=.d)
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
-$(OUTPUT).gci: $(OUTPUT).rel $(BANNERFILE) $(ICONFILE)
 $(OUTPUT).rel: $(OUTPUT).elf $(MAPFILE)
 $(OUTPUT).elf: $(LDFILES) $(OFILES)
 
@@ -169,11 +165,7 @@ $(OFILES_SOURCES) : $(HFILES)
 %.rel: %.elf
 	@echo output ... $(notdir $@)
 	@$(ELF2REL) $< -s $(MAPFILE)
-	
-%.gci: %.rel
-	@echo packing ... $(notdir $@)
-	@$(GCIPACK) $< "rel" "Paper Mario" "TTYD Debug Menu" $(BANNERFILE) $(ICONFILE) $(GAMECODE)
-	
+
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .jpg extension
 #---------------------------------------------------------------------------------

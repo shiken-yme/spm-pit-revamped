@@ -1,3 +1,5 @@
+#include <wii/os.h>
+
 extern "C" {
 
 typedef void (*PFN_voidfunc)();
@@ -20,6 +22,8 @@ extern void main();
 
 void _prolog()
 {
+	wii::os::OSReport("The mod has ran!");
+	/*
 	// Run global constructors
 	for (PFN_voidfunc *ctor = _ctors_start; ctor != _ctors_end && *ctor; ++ctor)
 	{
@@ -28,6 +32,7 @@ void _prolog()
 	
 	// Run mod main
 	mod::main();
+	*/
 }
 
 void _epilog()
