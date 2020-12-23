@@ -11,25 +11,40 @@ ifeq ($(strip $(TTYDTOOLS)),)
 $(error "Please set TTYDTOOLS in your environment. export TTYDTOOLS=<path to>ttyd-tools")
 endif
 
-include $(DEVKITPPC)/gamecube_rules
+include $(DEVKITPPC)/wii_rules
 
 export ELF2REL	:=	$(TTYDTOOLS)/bin/elf2rel
 
 ifeq ($(VERSION),)
-all: us jp eu
-us:
-	@$(MAKE) --no-print-directory VERSION=us
-jp:
-	@$(MAKE) --no-print-directory VERSION=jp
-eu:
-	@$(MAKE) --no-print-directory VERSION=eu
+all: us0 us1 us2 jp0 jp1 eu0 eu1 kr0
+us0:
+	@$(MAKE) --no-print-directory VERSION=us0
+us1:
+	@$(MAKE) --no-print-directory VERSION=us1
+us2:
+	@$(MAKE) --no-print-directory VERSION=us2
+jp0:
+	@$(MAKE) --no-print-directory VERSION=jp0
+jp1:
+	@$(MAKE) --no-print-directory VERSION=jp1
+eu0:
+	@$(MAKE) --no-print-directory VERSION=eu0
+eu1:
+	@$(MAKE) --no-print-directory VERSION=eu1
+kr0:
+	@$(MAKE) --no-print-directory VERSION=kr0
 
 clean:
-	@$(MAKE) --no-print-directory clean_target VERSION=us
-	@$(MAKE) --no-print-directory clean_target VERSION=eu
-	@$(MAKE) --no-print-directory clean_target VERSION=jp
+	@$(MAKE) --no-print-directory clean_target VERSION=us0
+	@$(MAKE) --no-print-directory clean_target VERSION=us1
+	@$(MAKE) --no-print-directory clean_target VERSION=us2
+	@$(MAKE) --no-print-directory clean_target VERSION=jp0
+	@$(MAKE) --no-print-directory clean_target VERSION=jp1
+	@$(MAKE) --no-print-directory clean_target VERSION=eu0
+	@$(MAKE) --no-print-directory clean_target VERSION=eu1
+	@$(MAKE) --no-print-directory clean_target VERSION=kr0
 
-.PHONY: all clean us jp eu
+.PHONY: all clean us0 us1 us2 jp0 jp1 eu0 eu1 kr0
 else
 
 #---------------------------------------------------------------------------------
