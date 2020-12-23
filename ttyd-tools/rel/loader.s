@@ -1,14 +1,48 @@
-# C2 @ 8023e5fc
+# C2 Insert at:
+#   eu0 8023e5fc
+#   eu1 
+#   us0 
+#   us1  
+#   us2 
+#   jp0 
+#   jp1 
+#   kr0 80236CC8
 
-.set DVDConvertPathToEntrynum, 0x8027b910
-.set memcpy, 0x80004000
-.set memset, 0x80004104
-.set fileAlloc, 0x8019f7dc
-.set fileAsync, 0x8019fd24
-.set fileFree, 0x8019fa8c
-.set __MemAlloc, 0x801a626c
-.set OSFatal, 0x802729b8
-.set OSLink, 0x80274c0c
+.set REGION, 'e' # e(u), u(s), j(p), k(r)
+.set REVISION, 0 # 0-1,  0-2,  0-1,  0
+
+.set memcpy, 0x80004000 # region free
+.if ((REGION == 'e') && (REVISION == 0))
+    .set DVDConvertPathToEntrynum, 0x8027b910
+    .set fileAlloc, 0x8019f7dc
+    .set fileAsync, 0x8019fd24
+    .set fileFree, 0x8019fa8c
+    .set __memAlloc, 0x801a626c
+    .set OSFatal, 0x802729b8
+    .set OSLink, 0x80274c0c
+.elseif ((REGION == 'e') && (REVISION == 1))
+    .err # unported
+.elseif ((REGION == 'u') && (REVISION == 0))
+    .err # unported
+.elseif ((REGION == 'u') && (REVISION == 1))
+    .err # unported
+.elseif ((REGION == 'u') && (REVISION == 2))
+    .err # unported
+.elseif ((REGION == 'j') && (REVISION == 0))
+    .err # unported
+.elseif ((REGION == 'j') && (REVISION == 1))
+    .err # unported
+.elseif ((REGION == 'k') && (REVISION == 0))
+    .set DVDConvertPathToEntrynum, 0x8027F85C
+    .set fileAlloc, 0x8019B8B0
+    .set fileAsync, 0x8019BDF8
+    .set fileFree, 0x8019BB60
+    .set __memAlloc, 0x8019EB44
+    .set OSFatal, 0x80275114
+    .set OSLink, 0x80277328
+.else
+    .err # Unknown version
+.endif
 
 # r31: startdata pointer
 # r30: file record pointer then bss pointer
@@ -16,6 +50,7 @@
 # r28: rel memory pointer
 
 start:
+
 # push stack
 mflr r0
 stw r0, 4 (r1)
@@ -36,8 +71,6 @@ p_DVDConvertPathToEntrynum:
 .long DVDConvertPathToEntrynum
 p_memcpy:
 .long memcpy
-p_memset:
-.long memset
 p_fileAlloc:
 .long fileAlloc
 p_fileAsync:
@@ -48,8 +81,8 @@ p_OSFatal:
 .long OSFatal
 p_OSLink:
 .long OSLink
-p_MemAlloc:
-.long __MemAlloc
+p_memAlloc:
+.long __memAlloc
 
 relPath:
 .string "./rel/mod.rel"
@@ -133,7 +166,7 @@ lwz r29, 0xa4 (r3)
 # Allocate memory for rel
 li r3, 0
 lwz r4, 4 (r29)
-lwz r0, p_MemAlloc - startdata (r31)
+lwz r0, p_memAlloc - startdata (r31)
 mtlr r0
 blrl
 mr r28, r3
@@ -151,22 +184,17 @@ lwz r0, p_fileFree - startdata (r31)
 mtlr r0
 blrl
 
-# Allocate bss and set to 0
+# Allocate bss - no need to memset to 0 like game's rel loading
+# function does, OSLink already does that
 li r3, 0
 lwz r4, 0x20 (r28)
-lwz r0, p_MemAlloc - startdata (r31)
-mtlr r0
-blrl
-mr r30, r3
-li r4, 0
-lwz r5, 0x20 (r28)
-lwz r0, p_memset - startdata (r31)
+lwz r0, p_memAlloc - startdata (r31)
 mtlr r0
 blrl
 
 # Link rel
+mr r4, r3
 mr r3, r28
-mr r4, r30
 lwz r0, p_OSLink - startdata (r31)
 mtlr r0
 blrl

@@ -1,0 +1,6 @@
+// os.a
+8027307c:OSReport
+
+// memory.c
+8019eb44:__memAlloc
+8019ebc8:__memFree
