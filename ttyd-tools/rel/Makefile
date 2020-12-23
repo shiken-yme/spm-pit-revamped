@@ -58,13 +58,13 @@ LDFLAGS		= -r -e _prolog -u _prolog -u _epilog -u _unresolved -Wl,--gc-sections 
 # Platform options
 ifeq ($(VERSION),us)
 	CFLAGS += -DTTYD_US
-	GAMECODE = "G8ME"
+	GAMECODE = "R8PE"
 else ifeq ($(VERSION),jp)
 	CFLAGS += -DTTYD_JP
-	GAMECODE = "G8MJ"
+	GAMECODE = "R8PJ"
 else ifeq ($(VERSION),eu)
 	CFLAGS += -DTTYD_EU
-	GAMECODE = "G8MP"
+	GAMECODE = "R8PP"
 endif
 
 
