@@ -1,12 +1,12 @@
-# C2 Insert at:
-#   eu0 8023e5fc
+# C2 Insert at loadrel:
+#   eu0 8023e444
 #   eu1 
 #   us0 
 #   us1  
 #   us2 
 #   jp0 
 #   jp1 
-#   kr0 80236CC8
+#   kr0 80236b10
 
 .set REGION, 'e' # e(u), u(s), j(p), k(r)
 .set REVISION, 0 # 0-1,  0-2,  0-1,  0
@@ -62,8 +62,8 @@ bl enddata
 
 startdata:
 
-blrInstr:
-blr
+removeFullCodeInstr:
+b default - start
 removeEntrynumCheckInstr:
 b tryFileAsync - entrynumCheck
 
@@ -204,8 +204,8 @@ lwz r0, 0x34 (r28)
 mtlr r0
 blrl
 
-# Stop this code running again
-lwz r0, blrInstr - startdata (r31)
+# Stop this code running again and let the game's rel load
+lwz r0, removeFullCodeInstr - startdata (r31)
 stw r0, start - startdata (r31)
 addi r3, r31, start - startdata
 dcbf r0, r3
@@ -218,3 +218,6 @@ addi r1, r1, 24
 lwz r0, 4 (r1)
 mtlr r0
 blr
+
+default: # will flow into the function to load the game's rel
+stwu r1, -0x60 (r1) # default instruction at hook address
