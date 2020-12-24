@@ -1,6 +1,6 @@
 #pragma once
 
-namespace wii::os {
+namespace wii::OSError {
 
 extern "C" {
 

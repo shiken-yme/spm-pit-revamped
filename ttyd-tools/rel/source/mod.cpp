@@ -2,7 +2,7 @@
 
 #include "patch.h"
 
-#include <wii/os.h>
+#include <wii/OSError.h>
 
 #include <cstdio>
 #include <cstring>
@@ -19,7 +19,7 @@ void main()
 
 Mod::Mod()
 {
-	wii::os::OSReport("The mod has ran! Object at 0x%x", (unsigned int) this);
+	wii::OSError::OSReport("The mod has ran! Object at 0x%x", (unsigned int) this);
 }
 
 void Mod::init()
