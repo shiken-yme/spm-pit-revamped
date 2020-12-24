@@ -5,7 +5,7 @@
 namespace mod::patch {
 
 void clear_DC_IC_Cache(void * ptr, uint32_t size);
-void writeBranch(void *ptr, void *destination);
+void writeBranch(void *ptr, void *destination, bool link = false);
 
 template<typename Func, typename Dest>
 Func hookFunction(Func function, Dest destination)

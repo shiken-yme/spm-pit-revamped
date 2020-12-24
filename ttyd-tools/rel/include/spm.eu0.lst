@@ -1,10 +1,16 @@
+// memory.c
+801a626c:__memAlloc
+801a62f0:__memFree
+
+// mapdata.c
+// text
+800294e0:mapDataPtr
+// data
+804031b8:mapDataList
+
 // os.a
 // OSCache.c
 80270050:DCFlushRange
 802700d8:ICInvalidateRange
 // OSError.c
 80270c60:OSReport
-
-// memory.c
-801a626c:__memAlloc
-801a62f0:__memFree

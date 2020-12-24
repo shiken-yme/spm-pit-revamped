@@ -4,7 +4,7 @@ namespace wii::OSError {
 
 extern "C" {
 
-void OSReport(const char * message, ...);
+void OSReport(const char *message, ...);
 
 }
 

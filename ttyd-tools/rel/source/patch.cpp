@@ -6,7 +6,8 @@
 
 namespace mod::patch {
 
-void clear_IC_DC_Cache(void * ptr, uint32_t size) {
+void clear_IC_DC_Cache(void * ptr, uint32_t size)
+{
 	wii::OSCache::DCFlushRange(ptr, size);
 	wii::OSCache::ICInvalidateRange(ptr, size);
 }

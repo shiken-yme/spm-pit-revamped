@@ -71,22 +71,37 @@ CXXFLAGS	= -fno-exceptions -fno-rtti -std=gnu++17 $(CFLAGS)
 LDFLAGS		= -r -e _prolog -u _prolog -u _epilog -u _unresolved -Wl,--gc-sections -nostdlib -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 
 # Platform options
-ifeq ($(VERSION),us)
-	CFLAGS += -DTTYD_US
+ifeq ($(VERSION),us0)
+	CFLAGS += -DSPM_US0
 	GAMECODE = "R8PE"
-else ifeq ($(VERSION),jp)
-	CFLAGS += -DTTYD_JP
+else ifeq ($(VERSION),us1)
+	CFLAGS += -DSPM_US1
+	GAMECODE = "R8PE"
+else ifeq ($(VERSION),us2)
+	CFLAGS += -DSPM_US2
+	GAMECODE = "R8PE"
+else ifeq ($(VERSION),jp0)
+	CFLAGS += -DSPM_JP0
 	GAMECODE = "R8PJ"
-else ifeq ($(VERSION),eu)
-	CFLAGS += -DTTYD_EU
+else ifeq ($(VERSION),jp1)
+	CFLAGS += -DSPM_JP1
+	GAMECODE = "R8PJ"
+else ifeq ($(VERSION),eu0)
+	CFLAGS += -DSPM_EU0
 	GAMECODE = "R8PP"
+else ifeq ($(VERSION),eu1)
+	CFLAGS += -DSPM_EU1
+	GAMECODE = "R8PP"
+else ifeq ($(VERSION),kr0)
+	CFLAGS += -DSPM_KR0
+	GAMECODE = "R8PK"
 endif
 
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:= -lm
+#LIBS	:= -lm
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
