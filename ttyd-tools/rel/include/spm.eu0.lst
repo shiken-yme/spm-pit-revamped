@@ -1,6 +1,59 @@
+// seqdrv.c
+// text
+8017bf2c:seqInit_SPMARIO
+8017bf6c:seqMain
+8017c074:seqSetSeq
+8017c084:seqGetSeq
+// data
+80512360:seqWork
+
+// fontmgr.c
+8019ffb8:fontmgrInit
+801a0070:FontDrawStart
+801a0150:FontDrawStart_alpha
+801a0228:FontDrawEdge
+801a0234:FontDrawEdgeOff
+801a0240:FontDrawRainbowColor
+801a02e0:FontDrawRainbowColorOff
+801a02e8:FontDrawNoise
+801a03f4:FontDrawNoiseOff
+801a0420:FontDrawColorIDX
+801a04b8:FontDrawColor
+801a0554:FontDrawColor_
+801a05dc:FontGetDrawColor
+801a05e4:FontDrawScale
+801a05fc:FontDrawCode
+801a0814:FontDrawCodeMtx
+801a09d4:FontDrawString
+801a0a18:FontDrawStringVecPitch
+801a0de0:FontDrawStringMtx
+801a11e0:FontDrawStringCenterMtx
+801a151c:FontDrawMessage
+801a1d50:FontDrawMessageMtx
+801a24d8:hankakuSearch
+801a24e0:kanjiSearch
+801a24e4:kanjiGetWidth
+801a255c:FontGetMessageWidthLine
+801a28ac:FontGetMessageWidth
+801a28b4:HSV2RGB
+// more
+
+// seqdef.c
+804287a8:seq_data
+
 // memory.c
 801a626c:__memAlloc
 801a62f0:__memFree
+
+// relmgr.c
+// text
+8023e434:relInit
+8023e444:loadRel
+8023e600:isRelLoaded
+// data
+805ae1a0:relHolder
+805ae1a4:relDecompName
+805ae1a8:relCompName
 
 // mapdata.c
 // text
@@ -14,3 +67,4 @@
 802700d8:ICInvalidateRange
 // OSError.c
 80270c60:OSReport
+802729b8:OSFatal
