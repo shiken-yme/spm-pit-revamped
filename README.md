@@ -6,7 +6,7 @@ The file "/rel/mod.rel" is loaded from the disc (add with [Riivolution](http://r
 
 # Regions & Revisions
 
-Currently, only supports PAL revision 0 and NTSC-K revision 0 are supported.
+Currently, only PAL revision 0 and NTSC-K revision 0 are supported.
 
 To change the target region or revsion for a rel, use `make rgX`, where rg is the region code ('eu', 'us', 'jp' or 'kr') and X is the revision number (0-1 for eu & jp, 0-2 for us, 0 for kr).
 
