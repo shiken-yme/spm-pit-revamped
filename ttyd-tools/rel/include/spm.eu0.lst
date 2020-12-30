@@ -1,3 +1,10 @@
+// evtmgr.c
+800d8b88:evtEntry
+800d8df4:evtEntryType
+800d9060:evtChildEntry
+800d9370:evtBrotherEntry
+// more
+
 // seqdrv.c
 // text
 8017bf2c:seqInit_SPMARIO

@@ -1,6 +1,7 @@
 #include "mod.h"
 #include "patch.h"
 
+#include <spm/evtmgr.h>
 #include <spm/fontmgr.h>
 #include <spm/mapdata.h>
 #include <spm/relmgr.h>
@@ -23,6 +24,12 @@ void main()
 }
 
 /*
+/ *
+	rel.bin Loading Hack
+	Loads rel.bin and hackily keeps the game alive long enough to dump its map evt script locations
+	(intended for taking a RAM dump and inspecting)
+* /
+
 static void dumpEvtLocs()
 {
     for (int i = 0; i < MAP_ID_MAX; i++)
@@ -65,8 +72,89 @@ static void relDotBinLoadHack()
 }
 */
 
+/*
+	Evt Script Logger
+	Logs every unique script passed into one of the evtEntry functions
+*/
+
+using EvtEntry = spm::evtmgr::EvtEntry;
+using EvtScriptCode = spm::evtmgr::EvtScriptCode;
+struct ScriptRecord
+{
+	EvtScriptCode *script;
+	struct ScriptRecord *next;
+};
+static struct ScriptRecord * knownScripts = nullptr;
+
+static bool isScriptNew(EvtScriptCode *script)
+{
+	ScriptRecord *p = knownScripts;
+	while (p != nullptr)
+	{
+		if (p->script == script)
+			return false;
+		p = p->next;
+	}
+	return true;
+}
+static void recordScript(EvtScriptCode *script)
+{
+	knownScripts = new ScriptRecord {script, knownScripts};
+}
+static const char *getAddrFile(void * addr)
+{
+	return (uint32_t) addr < 0x805b773c ? "dol" : "rel"; // eu0
+}
+static void evtEntryLog(EvtScriptCode * script)
+{
+	if (isScriptNew(script))
+	{
+		wii::OSError::OSReport("New evt script: 0x%x (%s)", (uint32_t) script, getAddrFile(script));
+		recordScript(script);
+	}
+}
+
+static EvtEntry *(*evtEntryOriginal)(EvtScriptCode*, uint8_t, uint8_t) = nullptr;
+static EvtEntry *(*evtEntryTypeOriginal)(EvtScriptCode * script, uint8_t priority, uint8_t flags, int32_t type) = nullptr;
+static EvtEntry *(*evtChildEntryOriginal)(EvtEntry * entry, EvtScriptCode * script, uint8_t flags) = nullptr;
+static EvtEntry *(*evtBrotherEntryOriginal)(EvtEntry * entry, EvtScriptCode * script, uint8_t flags) = nullptr;
+static EvtEntry *evtEntryOverride(EvtScriptCode *script, uint8_t priority, uint8_t flags)
+{
+	evtEntryLog(script);
+	return evtEntryOriginal(script, priority, flags);
+}
+static EvtEntry *evtEntryTypeOverride(EvtScriptCode * script, uint8_t priority, uint8_t flags, int32_t type)
+{
+	evtEntryLog(script);
+	return evtEntryTypeOriginal(script, priority, flags, type);
+}
+static EvtEntry *evtChildEntryOverride(EvtEntry * entry, EvtScriptCode * script, uint8_t flags)
+{
+	evtEntryLog(script);
+	return evtChildEntryOriginal(entry, script, flags);
+}
+static EvtEntry *evtBrotherEntryOverride(EvtEntry * entry, EvtScriptCode * script, uint8_t flags)
+{
+	evtEntryLog(script);
+	return evtChildEntryOriginal(entry, script, flags);
+}
+
+static void evtScriptLoggerPatch()
+{
+	evtEntryOriginal = patch::hookFunction(spm::evtmgr::evtEntry, evtEntryOverride);
+	evtEntryTypeOriginal = patch::hookFunction(spm::evtmgr::evtEntryType, evtEntryTypeOverride);
+	evtChildEntryOriginal = patch::hookFunction(spm::evtmgr::evtChildEntry, evtChildEntryOverride);
+	evtBrotherEntryOriginal = patch::hookFunction(spm::evtmgr::evtBrotherEntry, evtBrotherEntryOverride);
+}
+
+/*
+	Title Screen Custom Text
+	Prints "SPM Rel Loader V1.0" at the top of the title screen
+*/
+
 static spm::seqdef::SeqFunc *seq_titleMainReal;
-static void seq_titleMainOverride(spm::seqdrv::SeqWork *wp) {
+static void seq_titleMainOverride(spm::seqdrv::SeqWork *wp)
+{
 	wii::RGBA green {0, 255, 0, 255};
 	spm::fontmgr::FontDrawStart();
 	spm::fontmgr::FontDrawEdge();
@@ -83,6 +171,10 @@ static void titleScreenCustomTextPatch()
 	spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main = &seq_titleMainOverride;
 }
 
+/*
+	General mod functions
+*/
+
 Mod::Mod()
 {
 	wii::OSError::OSReport("The mod has ran! Object at 0x%x\n", (uint32_t) this);
@@ -93,6 +185,7 @@ void Mod::init()
 	gMod = this;
 	// relDotBinLoadHack();
 	titleScreenCustomTextPatch();
+	evtScriptLoggerPatch();
 }
 
 }

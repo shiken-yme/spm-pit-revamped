@@ -6,7 +6,7 @@
 
 namespace mod::patch {
 
-void clear_IC_DC_Cache(void * ptr, uint32_t size)
+void clear_DC_IC_Cache(void * ptr, uint32_t size)
 {
 	wii::OSCache::DCFlushRange(ptr, size);
 	wii::OSCache::ICInvalidateRange(ptr, size);
@@ -21,7 +21,7 @@ void writeBranch(void *ptr, void *destination, bool link)
 	uint32_t *p = reinterpret_cast<uint32_t *>(ptr);
 	*p = value;
 
-	clear_IC_DC_Cache(ptr, sizeof(uint32_t));
+	clear_DC_IC_Cache(ptr, sizeof(uint32_t));
 }
 
 }
