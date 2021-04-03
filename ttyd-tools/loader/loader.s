@@ -1,8 +1,8 @@
-# C2 Insert at loadrel:
+# C2 Insert at relMain:
 #   eu0 8023e444
-#   eu1 
-#   us0 
-#   us1  
+#   eu1 8023e444
+#   us0 8023be50
+#   us1 
 #   us2 
 #   jp0 
 #   jp1 
@@ -12,7 +12,7 @@
 .set REVISION, 0 # 0-1,  0-2,  0-1,  0
 
 .set memcpy, 0x80004000 # region free
-.if ((REGION == 'e') && (REVISION == 0))
+.if (REGION == 'e') # both revisions have identical dols
     .set DVDConvertPathToEntrynum, 0x8027b910
     .set fileAlloc, 0x8019f7dc
     .set fileAsync, 0x8019fd24
@@ -23,7 +23,13 @@
 .elseif ((REGION == 'e') && (REVISION == 1))
     .err # unported
 .elseif ((REGION == 'u') && (REVISION == 0))
-    .err # unported
+    .set DVDConvertPathToEntrynum, 0x80278f74
+    .set fileAlloc, 0x8019ea50 
+    .set fileAsync, 0x8019ef98
+    .set fileFree, 0x8019ed00
+    .set __memAlloc, 0x801a5634
+    .set OSFatal, 0x80270198 
+    .set OSLink, 0x802723cc
 .elseif ((REGION == 'u') && (REVISION == 1))
     .err # unported
 .elseif ((REGION == 'u') && (REVISION == 2))
@@ -85,7 +91,7 @@ p_memAlloc:
 .long __memAlloc
 
 relPath:
-.string "./rel/mod.rel"
+.string "./mod/mod.rel"
 
 noRelMsg:
 .string "ERROR: mod.rel was not found"
@@ -101,7 +107,7 @@ enddata:
 
 mflr r31
 
-# Try get entrynum for "./rel/mod.rel"
+# Try get entrynum for "./mod/mod.rel"
 entrynumCheck:
 addi r3, r31, relPath - startdata
 lwz r0, p_DVDConvertPathToEntrynum - startdata (r31)
@@ -124,8 +130,8 @@ haveEntrynum:
 lwz r0, removeEntrynumCheckInstr - startdata (r31)
 stw r0, entrynumCheck - startdata (r31)
 addi r3, r31, entrynumCheck - startdata
-dcbf r0, r3
-icbi r0, r3
+dcbf 0, r3
+icbi 0, r3
 
 # Call fileAsync
 tryFileAsync:
@@ -208,8 +214,8 @@ blrl
 lwz r0, removeFullCodeInstr - startdata (r31)
 stw r0, start - startdata (r31)
 addi r3, r31, start - startdata
-dcbf r0, r3
-icbi r0, r3
+dcbf 0, r3
+icbi 0, r3
 
 end:
 # pop stack
