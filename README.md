@@ -2,7 +2,7 @@
 
 A project to allow rel files created by PistonMiner's rel tools to be ran in Super Paper Mario. Will eventually include a library to interact with the game with in the rel.
 
-The file "/rel/mod.rel" is loaded from the disc (add with [Riivolution](http://rvlution.net/wiki/Riivolution/) or by ISO patching with [Wiimms ISO Tools](https://wit.wiimm.de/)) and executed during boot, before the game's rel, by the cheat code given in loader.s (assemble with a tool like [Pyiiasmh](https://github.com/JoshuaMKW/pyiiasmh) or [Codewrite](https://github.com/TheGag96/CodeWrite)).
+The file "/mod/mod.rel" is loaded from the disc (add with [Riivolution](http://rvlution.net/wiki/Riivolution/) or by ISO patching with [Wiimms ISO Tools](https://wit.wiimm.de/)) and executed during boot, before the game's rel, by the cheat code given in loader.s (assemble with a tool like [Pyiiasmh](https://github.com/JoshuaMKW/pyiiasmh) or [Codewrite](https://github.com/TheGag96/CodeWrite)).
 
 # Regions & Revisions
 
