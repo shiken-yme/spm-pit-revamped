@@ -1,12 +1,42 @@
-# C2 Insert at relMain:
-#   eu0 8023e444
-#   eu1 8023e444
-#   us0 8023be50
-#   us1 
-#   us2 
-#   jp0 
-#   jp1 
-#   kr0 80236b10
+# Redirect wp->loaded
+# eu0 / eu1
+0423E45C 88030009
+0423E5E4 98030009
+0423E500 98030009
+# us0
+0423BE68 88030009
+0423BFF0 98030009
+0423BF0C 98030009
+# us1
+0423C554 88030009
+0423C6DC 98030009
+0423C5F8 98030009
+# us2
+0423C878 88030009
+0423CA00 98030009
+0423C91C 98030009
+# jp0
+0423BE10 88030009
+0423BF98 98030009
+0423BEB4 98030009
+# jp1
+0423C4BC 88030009
+0423C644 98030009
+0423C560 98030009
+# kr0
+04236B28 88030009
+04236CB0 98030009
+04236BCC 98030009
+
+# C2 Insert at relMain blr:
+#  eu0 8023e5fc
+#  eu1 8023e5fc
+#  us0 8023C008
+#  us1 8023C6F4
+#  us2 8023CA18
+#  jp0 8023BFB0
+#  jp1 8023C65C
+#  kr0 80236CC8
 
 .set REGION, 'e' # e(u), u(s), j(p), k(r)
 .set REVISION, 0 # 0-1,  0-2,  0-1,  0
@@ -20,24 +50,52 @@
     .set __memAlloc, 0x801a626c
     .set OSFatal, 0x802729b8
     .set OSLink, 0x80274c0c
-.elseif ((REGION == 'e') && (REVISION == 1))
-    .err # unported
+    .set relWork, 0x80534f98
 .elseif ((REGION == 'u') && (REVISION == 0))
-    .set DVDConvertPathToEntrynum, 0x80278f74
-    .set fileAlloc, 0x8019ea50 
-    .set fileAsync, 0x8019ef98
-    .set fileFree, 0x8019ed00
-    .set __memAlloc, 0x801a5634
-    .set OSFatal, 0x80270198 
-    .set OSLink, 0x802723cc
+    .set DVDConvertPathToEntrynum, 0x80278F74
+    .set fileAlloc, 0x8019EA50
+    .set fileAsync, 0x8019EF98
+    .set fileFree, 0x8019ED00
+    .set __memAlloc, 0x801A5634
+    .set OSFatal, 0x80270198
+    .set OSLink, 0x802723CC
+    .set relWork, 0x804f1f90
 .elseif ((REGION == 'u') && (REVISION == 1))
-    .err # unported
+    .set DVDConvertPathToEntrynum, 0x802797C0
+    .set fileAlloc, 0x8019EAAC
+    .set fileAsync, 0x8019EFF4
+    .set fileFree, 0x8019ED5C
+    .set __memAlloc, 0x801A5690
+    .set OSFatal, 0x80270868
+    .set OSLink, 0x80272ABC
+    .set relWork, 0x804f3818
 .elseif ((REGION == 'u') && (REVISION == 2))
-    .err # unported
+    .set DVDConvertPathToEntrynum, 0x80279860
+    .set fileAlloc, 0x8019EDC4
+    .set fileAsync, 0x8019F30C
+    .set fileFree, 0x8019F074
+    .set __memAlloc, 0x801A59A8
+    .set OSFatal, 0x80270908
+    .set OSLink, 0x80272B5C
+    .set relWork, 0x804f3998
 .elseif ((REGION == 'j') && (REVISION == 0))
-    .err # unported
+    .set DVDConvertPathToEntrynum, 0x80278F24
+    .set fileAlloc, 0x8019EA40
+    .set fileAsync, 0x8019EF88
+    .set fileFree, 0x8019ECF0
+    .set __memAlloc, 0x801A5624
+    .set OSFatal, 0x80270148
+    .set OSLink, 0x8027237C
+    .set relWork, 0x804c7290
 .elseif ((REGION == 'j') && (REVISION == 1))
-    .err # unported
+    .set DVDConvertPathToEntrynum, 0x80279720
+    .set fileAlloc, 0x8019EA88
+    .set fileAsync, 0x8019EFD0
+    .set fileFree, 0x8019ED38
+    .set __memAlloc, 0x801A566C
+    .set OSFatal, 0x802707C8
+    .set OSLink, 0x80272A1C
+    .set relWork, 0x804c8898
 .elseif ((REGION == 'k') && (REVISION == 0))
     .set DVDConvertPathToEntrynum, 0x8027F85C
     .set fileAlloc, 0x8019B8B0
@@ -46,6 +104,7 @@
     .set __memAlloc, 0x8019EB44
     .set OSFatal, 0x80275114
     .set OSLink, 0x80277328
+    .set relWork, 0x8056c928
 .else
     .err # Unknown version
 .endif
@@ -68,8 +127,6 @@ bl enddata
 
 startdata:
 
-removeFullCodeInstr:
-b default - start
 removeEntrynumCheckInstr:
 b tryFileAsync - entrynumCheck
 
@@ -89,6 +146,8 @@ p_OSLink:
 .long OSLink
 p_memAlloc:
 .long __memAlloc
+p_relWork:
+.long relWork
 
 relPath:
 .string "./mod/mod.rel"
@@ -107,6 +166,15 @@ enddata:
 
 mflr r31
 
+# Check if the game's rel is loaded and this rel isn't
+lwz r3, p_relWork - startdata (r31)
+lbz r4, 9 (r3)
+cmpwi r4, 0
+beq end
+lbz r4, 8 (r3)
+cmpwi r4, 0
+bne end
+
 # Try get entrynum for "./mod/mod.rel"
 entrynumCheck:
 addi r3, r31, relPath - startdata
@@ -120,7 +188,7 @@ bne+ haveEntrynum
 addi r3, r31, foreground - startdata
 addi r4, r31, background - startdata
 addi r5, r31, noRelMsg - startdata
-lwz 0, p_OSFatal - startdata (r31)
+lwz r0, p_OSFatal - startdata (r31)
 mtlr r0
 blrl
 b end
@@ -210,12 +278,10 @@ lwz r0, 0x34 (r28)
 mtlr r0
 blrl
 
-# Stop this code running again and let the game's rel load
-lwz r0, removeFullCodeInstr - startdata (r31)
-stw r0, start - startdata (r31)
-addi r3, r31, start - startdata
-dcbf 0, r3
-icbi 0, r3
+# Stop this code running again and let the game continue
+lwz r3, p_relWork - startdata (r31)
+li r0, 1
+stb r0, 8 (r3)
 
 end:
 # pop stack
@@ -224,6 +290,3 @@ addi r1, r1, 24
 lwz r0, 4 (r1)
 mtlr r0
 blr
-
-default: # will flow into the function to load the game's rel
-stwu r1, -0x60 (r1) # default instruction at hook address
