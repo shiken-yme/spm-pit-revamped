@@ -1,14 +1,17 @@
 #pragma once
 
-#include <cstdint>
+#include <types.h>
+#include <spm/evtmgr.h>
 
 #define EVT_BEGIN(name) \
-	const int32_t name[] = {
+	const spm::evtmgr::EvtScriptCode name[] = {
+#define EVT_BEGIN_EDITABLE(name) \
+	s32 name[] = {
 #define EVT_END() \
 	0x1 };
 
 #define EVT_HELPER_OP(op) \
-	reinterpret_cast<int32_t>((op))
+	reinterpret_cast<s32>((op))
 
 // Expression types
 #define EVT_HELPER_EXPR(base, offset) \
@@ -50,15 +53,15 @@
 
 #define FLOAT(value) \
 	EVT_HELPER_EXPR( \
-		EVT_HELPER_FLOAT_BASE, static_cast<int32_t>((value) * 1024.f) \
+		EVT_HELPER_FLOAT_BASE, static_cast<s32>((value) * 1024.f) \
 	)
 #define PTR(value) \
-	reinterpret_cast<int32_t>(value)
+	reinterpret_cast<s32>(value)
 
 // Commands
 #define EVT_HELPER_CMD(parameter_count, opcode) \
-	static_cast<int32_t>( \
-		static_cast<uint32_t>((parameter_count) << 16 | (opcode)) \
+	static_cast<s32>( \
+		static_cast<u32>((parameter_count) << 16 | (opcode)) \
 	)
 
 #define RETURN() \
@@ -78,10 +81,10 @@
 #define DO_CONTINUE() \
 	EVT_HELPER_CMD(0, 8),
 
-#define WAIT_FRM() \
-	EVT_HELPER_CMD(1, 9),
-#define WAIT_MSEC() \
-	EVT_HELPER_CMD(1, 10),
+#define WAIT_FRM(frm) \
+	EVT_HELPER_CMD(1, 9), EVT_HELPER_OP(frm),
+#define WAIT_MSEC(msec) \
+	EVT_HELPER_CMD(1, 10), EVT_HELPER_OP(msec),
 #define HALT(until) \
 	EVT_HELPER_CMD(1, 11), EVT_HELPER_OP(until),
 
@@ -125,9 +128,9 @@
 	EVT_HELPER_CMD(2, 29), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
 
 #define IF_FLAG(val, mask) \
-	EVT_HELPER_CMD(2, 30), EVT_HELPER_OP(val), reinterpret_cast<int32_t>(mask),
+	EVT_HELPER_CMD(2, 30), EVT_HELPER_OP(val), reinterpret_cast<s32>(mask),
 #define IF_NOT_FLAG(val, mask) \
-	EVT_HELPER_CMD(2, 31), EVT_HELPER_OP(val), reinterpret_cast<int32_t>(mask),
+	EVT_HELPER_CMD(2, 31), EVT_HELPER_OP(val), reinterpret_cast<s32>(mask),
 
 #define ELSE() \
 	EVT_HELPER_CMD(0, 32),
@@ -159,7 +162,7 @@
 #define CASE_AND(val) \
 	EVT_HELPER_CMD(1, 44), EVT_HELPER_OP(val),
 #define CASE_FLAG(mask) \
-	EVT_HELPER_CMD(1, 45), reinterpret_cast<int32_t>(mask),
+	EVT_HELPER_CMD(1, 45), reinterpret_cast<s32>(mask),
 #define CASE_END() \
 	EVT_HELPER_CMD(0, 46),
 #define CASE_BETWEEN(low, high) \
@@ -177,34 +180,25 @@
 #define SETF(lhs, rhs) \
 	EVT_HELPER_CMD(2, 52), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
 
-#define ADD(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 53), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
-#define SUB(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 54), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
-#define MUL(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 55), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
-#define DIV(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 56), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
-#define MOD(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 57), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
+#define ADD(lhs, rhs) \
+	EVT_HELPER_CMD(2, 53), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
+#define SUB(lhs, rhs) \
+	EVT_HELPER_CMD(2, 54), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
+#define MUL(lhs, rhs) \
+	EVT_HELPER_CMD(2, 55), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
+#define DIV(lhs, rhs) \
+	EVT_HELPER_CMD(2, 56), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
+#define MOD(lhs, rhs) \
+	EVT_HELPER_CMD(2, 57), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
 
-#define ADDF(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 58), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
-#define SUBF(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 59), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
-#define MULF(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 60), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
-#define DIVF(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 61), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
+#define ADDF(lhs, rhs) \
+	EVT_HELPER_CMD(2, 58), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
+#define SUBF(lhs, rhs) \
+	EVT_HELPER_CMD(2, 59), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
+#define MULF(lhs, rhs) \
+	EVT_HELPER_CMD(2, 60), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
+#define DIVF(lhs, rhs) \
+	EVT_HELPER_CMD(2, 61), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
 
 #define SET_READ(val) \
 	EVT_HELPER_CMD(1, 62), EVT_HELPER_OP(val),
@@ -268,9 +262,9 @@
 	EVT_HELPER_CMD(2, 84), EVT_HELPER_OP(val), EVT_HELPER_OP(ptr),
 #define SET_RAMF(val, ptr) \
 	EVT_HELPER_CMD(2, 85), EVT_HELPER_OP(val), EVT_HELPER_OP(ptr),
-#define GET_RAM(val, ptr) \
+#define GET_RAM(out, ptr) \
 	EVT_HELPER_CMD(2, 86), EVT_HELPER_OP(out), EVT_HELPER_OP(ptr),
-#define GET_RAMF(val, ptr) \
+#define GET_RAMF(out, ptr) \
 	EVT_HELPER_CMD(2, 87), EVT_HELPER_OP(out), EVT_HELPER_OP(ptr),
 
 // R is short for Reg
@@ -289,9 +283,9 @@ class expression_assert
 {
 	static_assert(expression);
 };
-using evt_helper_int_array = int32_t[];
+using evt_helper_int_array = s32[];
 #define EVT_HELPER_NUM_ARGS(...) \
-	(sizeof(evt_helper_int_array{ __VA_ARGS__ }) / sizeof(int32_t))
+	(sizeof(evt_helper_int_array{ __VA_ARGS__ }) / sizeof(s32))
 #define USER_FUNC(function, ...) \
 	( \
 		expression_assert< \
@@ -300,7 +294,7 @@ using evt_helper_int_array = int32_t[];
 		>(), \
 		EVT_HELPER_CMD(1 + EVT_HELPER_NUM_ARGS(__VA_ARGS__), 92) \
 	), \
-	reinterpret_cast<int32_t>(function), \
+	reinterpret_cast<s32>(function), \
 	##__VA_ARGS__ ,
 
 #define RUN_EVT(evt) \
@@ -333,8 +327,8 @@ using evt_helper_int_array = int32_t[];
 	EVT_HELPER_CMD(1, 105), EVT_HELPER_OP(evt_id),
 #define START_ID(evt_id) \
 	EVT_HELPER_CMD(1, 106), EVT_HELPER_OP(evt_id),
-#define CHK_EVT(evt_id) \
-	EVT_HELPER_CMD(1, 107), EVT_HELPER_OP(evt_id),
+#define CHK_EVT(evt_id, is_running) \
+	EVT_HELPER_CMD(2, 107), EVT_HELPER_OP(evt_id), EVT_HELPER_OP(is_running)
 
 #define INLINE_EVT() \
 	EVT_HELPER_CMD(0, 108),
@@ -351,11 +345,11 @@ using evt_helper_int_array = int32_t[];
 	EVT_HELPER_CMD(0, 113),
 
 #define DEBUG_PUT_MSG(msg) \
-	EVT_HELPER_CMD(1, 114), EVT_HELPER_OP(msg)
+	EVT_HELPER_CMD(1, 114), EVT_HELPER_OP(msg),
 #define DEBUG_MSG_CLEAR(msg) \
 	EVT_HELPER_CMD(0, 115),
 #define DEBUG_PUT_REG(reg) \
-	EVT_HELPER_CMD(0, 116), EVT_HELPER_OP(reg),
+	EVT_HELPER_CMD(1, 116), EVT_HELPER_OP(reg),
 #define DEBUG_NAME(name) \
 	EVT_HELPER_CMD(1, 117), EVT_HELPER_OP(name),
 #define DEBUG_REM(text) \

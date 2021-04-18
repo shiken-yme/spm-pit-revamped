@@ -1,22 +1,22 @@
 #pragma once
 
-#include <cstdint>
+#include <types.h>
 
 namespace mod::patch {
 
-void clear_DC_IC_Cache(void * ptr, uint32_t size);
-void writeBranch(void *ptr, void *destination, bool link = false);
+void clear_DC_IC_Cache(void * ptr, u32 size);
+void writeBranch(void * ptr, void *destination, bool link = false);
 
 template<typename Func, typename Dest>
 Func hookFunction(Func function, Dest destination)
 {
-	uint32_t *instructions = reinterpret_cast<uint32_t *>(function);
+	u32 * instructions = reinterpret_cast<u32 *>(function);
 	
-	uint32_t *trampoline = new uint32_t[2];
+	u32 * trampoline = new u32[2];
 
 	// Original instruction
 	trampoline[0] = instructions[0];
-	clear_DC_IC_Cache(&trampoline[0], sizeof(uint32_t));
+	clear_DC_IC_Cache(&trampoline[0], sizeof(u32));
 
 	// Branch to original function past hook
 	writeBranch(&trampoline[1], &instructions[1]);
