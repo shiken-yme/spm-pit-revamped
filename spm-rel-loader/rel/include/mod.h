@@ -4,11 +4,6 @@
 
 namespace mod {
 
-class Mod
-{
-public:
-	Mod();
-	void init();
-};
+void main();
 
 }
