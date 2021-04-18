@@ -55,7 +55,7 @@ else
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR)).$(VERSION)
 BUILD		:=	build.$(VERSION)
-SOURCES		:=	source
+SOURCES		:=	source $(wildcard source/*)
 DATA		:=	data  
 INCLUDES	:=	include
 
@@ -97,6 +97,12 @@ else ifeq ($(VERSION),kr0)
 	GAMECODE = "R8PK"
 endif
 
+# PAL revision 1's dol is identical to revision 0, so no need for another lst
+ifeq ($(VERSION),eu1)
+	LST = eu0
+else
+	LST = $(VERSION)
+endif
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
@@ -149,7 +155,7 @@ export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 
 # For REL linking
 export LDFILES		:= $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.ld)))
-export MAPFILE		:= $(CURDIR)/include/spm.$(VERSION).lst
+export MAPFILE		:= $(CURDIR)/include/spm.$(LST).lst
 
 #---------------------------------------------------------------------------------
 # build a list of include paths
