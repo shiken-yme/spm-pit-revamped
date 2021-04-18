@@ -1,11 +1,7 @@
 #pragma once
 
-namespace spm::seqdrv {
-
-struct SeqWork;
-
-}
-
+// Would be cyclic include
+namespace spm::seqdrv { struct SeqWork; }
 
 namespace spm::seqdef {
 
@@ -13,9 +9,9 @@ typedef void (SeqFunc)(struct spm::seqdrv::SeqWork *);
 
 struct SeqDef
 {
-    SeqFunc *init;
-    SeqFunc *main;
-    SeqFunc *exit;
+    SeqFunc * init;
+    SeqFunc * main;
+    SeqFunc * exit;
 };
 
 extern "C" {

@@ -2,7 +2,7 @@
 
 #include <spm/seqdef.h>
 
-#include <cstdint>
+#include <types.h>
 
 namespace spm::seqdrv {
 
@@ -18,13 +18,14 @@ enum
 
 struct SeqWork
 {
-    int32_t seq; // enum above, or -1 if none
-    int32_t stage;
-    char *p0;
-    char *p1;
-    uint8_t unknown_0x10[0x20 - 0x10];
+    s32 seq; // enum above, or -1 if none
+    s32 stage;
+    char * p0;
+    char * p1;
+    u8 unknown_0x10[0x20 - 0x10];
     spm::seqdef::SeqFunc *afterFunc;
 };
+
 static_assert(sizeof(SeqWork) == 0x24);
 
 extern "C" {
@@ -33,8 +34,8 @@ extern SeqWork seqWork;
 
 void seqInit_SPMARIO();
 void seqMain();
-void seqSetSeq(int32_t seq, char * p0, char * p1);
-int32_t seqGetSeq();
+void seqSetSeq(s32 seq, const char * p0, const char * p1);
+s32 seqGetSeq();
 
 }
 
