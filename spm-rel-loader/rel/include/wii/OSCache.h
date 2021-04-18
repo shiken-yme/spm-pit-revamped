@@ -1,13 +1,13 @@
 #pragma once
 
-#include <cstdint>
+#include <types.h>
 
 namespace wii::OSCache {
 
 extern "C" {
 
-void DCFlushRange(void *ptr, uint32_t size);
-void ICInvalidateRange(void *ptr, uint32_t size);
+void DCFlushRange(void * ptr, u32 size);
+void ICInvalidateRange(void * ptr, u32 size);
 
 }
 

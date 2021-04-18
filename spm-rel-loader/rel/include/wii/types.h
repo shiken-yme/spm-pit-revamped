@@ -1,12 +1,19 @@
 #pragma once
 
-#include <cstdint>
+#include <types.h>
 
 namespace wii {
 
 struct RGBA
 {
-    uint8_t r, g, b, a;
+    u8 r, g, b, a;
 };
+
+struct Vec3
+{
+    float x, y, z;
+};
+
+typedef f32 Mtx34[3][4];
 
 }

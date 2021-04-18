@@ -6,8 +6,8 @@ namespace wii::OSError {
 
 extern "C" {
 
-void OSReport(const char *message, ...);
-void OSFatal(RGBA *foreground, RGBA *background, const char *messsage);
+void OSReport(const char * message, ...);
+void OSFatal(const RGBA * foreground, const RGBA * background, const char * messsage);
 
 }
 
