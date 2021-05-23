@@ -1,27 +1,34 @@
 #include "patch.h"
 
+#include <types.h>
 #include <wii/OSCache.h>
-
-#include <cstdint>
 
 namespace mod::patch {
 
-void clear_DC_IC_Cache(void * ptr, uint32_t size)
+void clear_DC_IC_Cache(void * ptr, u32 size)
 {
-	wii::OSCache::DCFlushRange(ptr, size);
-	wii::OSCache::ICInvalidateRange(ptr, size);
+    wii::OSCache::DCFlushRange(ptr, size);
+    wii::OSCache::ICInvalidateRange(ptr, size);
 }
 
-void writeBranch(void *ptr, void *destination, bool link)
+void _writeBranch(void * ptr, void * destination, bool link)
 {
-	uint32_t delta = reinterpret_cast<uint32_t>(destination) - reinterpret_cast<uint32_t>(ptr);
-	uint32_t value = link ? 0x48000001 : 0x48000000;
-	value |= (delta & 0x03FFFFFC);
-	
-	uint32_t *p = reinterpret_cast<uint32_t *>(ptr);
-	*p = value;
+    u32 delta = reinterpret_cast<u32>(destination) - reinterpret_cast<u32>(ptr);
+    u32 value = link ? 0x48000001 : 0x48000000;
+    value |= (delta & 0x03FFFFFC);
+    
+    u32 * p = reinterpret_cast<u32 *>(ptr);
+    *p = value;
 
-	clear_DC_IC_Cache(ptr, sizeof(uint32_t));
+    clear_DC_IC_Cache(ptr, sizeof(u32));
+}
+
+void _writeWord(void * ptr, u32 value)
+{
+    u32 * p = reinterpret_cast<u32 *>(ptr);
+    *p = value;
+
+    clear_DC_IC_Cache(ptr, sizeof(u32));
 }
 
 }
