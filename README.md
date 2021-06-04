@@ -16,4 +16,4 @@ To change the target for the loader, edit the definitions of REGION ('e' for eu,
   * elf2rel: Convert from ELF file to REL file
 
 ## Credits
-  * **PistonMiner**, **Zephiles**, **Jdaster64** and **JasperRLZ** for their work on the original TTYD rel loader this is based off of.
+  * **PistonMiner** and **Zephiles** for their work on the original TTYD rel loader this is based off of.
