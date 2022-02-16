@@ -9,9 +9,14 @@ struct RGBA
     u8 r, g, b, a;
 };
 
+struct Vec2
+{
+    f32 x, y;
+};
+
 struct Vec3
 {
-    float x, y, z;
+    f32 x, y, z;
 };
 
 typedef f32 Mtx34[3][4];

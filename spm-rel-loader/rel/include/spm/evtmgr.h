@@ -9,7 +9,7 @@ namespace spm::evtmgr {
 #define MAX_EVT_JMPTBL 16
 
 struct EvtEntry;
-typedef s32 (*user_func)(struct EvtEntry * entry, bool firstRun);
+typedef s32 (user_func)(struct EvtEntry * entry, bool firstRun);
 typedef s32 EvtScriptCode;
 
 #define EVT_FLAG_IN_USE (1 << 0) 
@@ -45,7 +45,7 @@ struct EvtEntry
     s32 * uw;
     u32 * uf;
     s32 id;
-    float speed;
+    f32 speed;
     u8 unknown_0x160[0x198 - 0x160];
     EvtScriptCode * scriptStart;
     char * name; // debug thing, unused?
