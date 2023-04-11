@@ -260,6 +260,8 @@ paket-files/
 __pycache__/
 *.pyc
 
+.gitignore
+
 # Project specific
 build.*
 *.rel
