@@ -1,15 +1,14 @@
 #include "mod.h"
 #include "patch.h"
 
+#include <spm/camdrv.h>
 #include <spm/fontmgr.h>
 #include <spm/seqdrv.h>
 #include <spm/seqdef.h>
 #include <wii/os/OSError.h>
 #include <wii/gx.h>
-#include <iostream>
 
 namespace mod {
-
 /*
     Title Screen Custom Text
     Prints "SPM Rel Loader" at the top of the title screen
@@ -40,12 +39,10 @@ static void titleScreenCustomTextPatch()
 /*
     General mod functions
 */
-
 void main()
 {
     wii::os::OSReport("SPM Rel Loader: the mod has ran!\n");
-
-    titleScreenCustomTextPatch();
+//other functions
 }
 
 }

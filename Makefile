@@ -4,7 +4,7 @@
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 
-export TTYDTOOLS = putpathhere
+export TTYDTOOLS = C:\Users\docaa\Documents\SPM-rel-loader\ttyd-tools
 
 ifeq ($(strip $(DEVKITPPC)),)
 $(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC")

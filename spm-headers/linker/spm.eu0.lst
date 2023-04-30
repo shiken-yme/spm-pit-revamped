@@ -60,6 +60,8 @@
 80055b24:camGetPtr
 80055b38:camGetCurPtr
 80058294:getScreenPoint
+8050b580:camPtrTbl
+80056a60:cam3dMain
 // more
 
 // casedrv.c
@@ -670,12 +672,12 @@
 
 // Sections:
 //   00000000 0 none
-//   80c458fc 1 .text 
-//   80ca9ad8 2 .ctors 
-//   80ca9adc 3 .dtors 
-//   80ca9ae8 4 .rodata 
-//   80cf5180 5 .data 
-//   80f64340 6 .bss 
+//   80c458fc 1 .text
+//   80ca9ad8 2 .ctors
+//   80ca9adc 3 .dtors
+//   80ca9ae8 4 .rodata
+//   80cf5180 5 .data
+//   80f64340 6 .bss
 
 // machi.c
 1,1,000052e4:evt_machi_set_elv_descs

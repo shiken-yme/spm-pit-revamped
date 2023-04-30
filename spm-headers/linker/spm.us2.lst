@@ -3,7 +3,10 @@
 800030c8:firstRel
 800030cc:lastRel
 
-// Automatically generated from spm.eu0.lst 
+800559D8:camGetCurNo
+800568E8:cam3dMain
+804C9F80:camPtrTbl
+// Automatically generated from spm.eu0.lst
 80004000:memcpy
 80004104:memset
 80029364:mapDataPtr
