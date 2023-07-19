@@ -42,6 +42,7 @@ static void titleScreenCustomTextPatch()
 void main()
 {
     wii::os::OSReport("SPM Rel Loader: the mod has ran!\n");
+    titleScreenCustomTextPatch();
 //other functions
 }
 
