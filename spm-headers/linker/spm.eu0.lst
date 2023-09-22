@@ -49,6 +49,19 @@
 8003ab80:windowDispGX2_Waku_col
 // more
 
+// acdrv.c
+8003eb4c:acInit
+8003eba0:acReInit
+8003ee44:acMain
+8003f388:acEntry
+8003f5d8:acReturnResults
+8003f5e0:acDelete
+8003f63c:acPauseAll
+8003f67c:acUnpauseAll
+8003f730:acIsRunning
+8003f780:acNameToPtr
+8003f818:acMsgDisp
+
 // animdrv.c
 8004249c:animPoseEntry
 80043410:animPoseSetAnim
@@ -190,6 +203,11 @@
 // bss
 8050ce30:evt_debug_put_reg_str
 // more
+
+// evt_ac.c
+800df9a8:evt_ac_entry
+800dfa00:evt_ac_return_results
+800dfaac:evt_ac_delete
 
 // evt_door.c
 // text
@@ -472,10 +490,13 @@
 // more
 
 // filemgr.c
+    // text
 8019f724:fileAllocf
 8019fa8c:fileFree
 8019fc5c:fileAsyncf
 // more
+    // sdata
+805ae130:filemgr_afp
 
 // fontmgr.c
 801a0070:FontDrawStart
@@ -706,6 +727,9 @@
 // more
 // OSThread.c
 80277ffc:OSSuspendThread
+80278190:OSSleepThread
+8027827c:OSWakeupThread
+// more
 // OSTime
 80278370:OSGetTime
 // more
@@ -722,10 +746,28 @@
 
 // dvd.a
 // dvdfs.c
+    // text
 8027b910:DVDConvertPathToEntrynum
+// more
+    // data
+805aec08:__DVDThreadQueue
+805aec10:MaxEntryNum
+805aec14:FstStringStart
+805aec18:FstStart
+// more
+// dvd.c
+    // text
+8027e840:stateReady
+    // sbss
+805aec24:PauseFlag
+805aeca0:executing
 // more
 // dvd_broadway.c
 805ae2d8:devDiStr
+// more
+// dvdqueue.c
+    // text
+802803dc:__DVDPushWaitingQueue
 // more
 
 // vi.a
@@ -768,12 +810,21 @@
 80295d90:MEMGetSizeForMBlockExpHeap
 // more
 
+// fs.a
+80296a04:ISFS_ReadDir
+// more
+
 // ipc.a
+    // text
+80297f04:__ios_Ipc2
 80298268:IOS_Open
 80298448:IOS_Close
 802985f0:IOS_Read
 80298b18:IOS_Ioctl
 80298e68:IOS_Ioctlv
+80299360:iosAllocAligned
+    // sdata
+805ae3b4:ipc_lbl_805ae3b4
 // more
 
 // NAND.a
@@ -822,21 +873,26 @@
 //   80cf5180 5 .data
 //   80f64340 6 .bss
 
+// machi.c
+1,1,52e4:evt_machi_set_elv_descs
+// more
+
+//sp4_13.c
+// text
+1,1,16854:spReturnAngryAnimPos
+1,1,16a08:func_80c5c304
+1,1,16a70:func_80c5c36c
+// data
+1,5,a95f8:spMrLStartTribeAnimDefs
+1,5,a9600:spMrLTribeAnimDefs
+1,5,a96e8:spMrLTauntTribeAnimDefs
+1,5,a9788:spTheGreenThunderTribeAnimDefs
+1,5,a9b24:mr_l_appear_evt
+1,5,aa4a0:brobot_appear_evt
+// more
+
 // an2_08.c
-1,6,1320:an2_08_wp
-1,5,fa148:lbl_80def2c8
-1,5,fa26c:rpg_snd_hit_evt
-1,5,fa2b8:rpg_snd_miss_evt
-1,5,fa380:rpg_attacking_evt
-1,5,fa858:rpg_use_pixls_evt
-1,5,fb380:rpg_use_items_evt
-1,5,fc7d8:rpg_run_away_evt
-1,5,fc9f0:underchomp_attack_1_evt
-1,5,fcd30:underchomp_attack_2_evt
-1,5,fd070:underchomp_attack_3_evt
-1,5,fd3b0:rpg_check_win_or_continue_evt
-1,5,fe150:final_rpg_child_evt
-1,5,fe1cc:begin_rpg_parent_evt
+// text
 1,1,2700c:func_80c6c908
 1,1,27050:rpgHandleMenu
 1,1,27590:rpg_screen_draw
@@ -861,27 +917,27 @@
 1,1,2d344:evt_rpg_point_handling
 1,1,2d37c:evt_rpg_get_item_msg
 1,1,2d3fc:evt_an2_08_draw_face
+// data
+1,5,fa148:lbl_80def2c8
+1,5,fa26c:rpg_snd_hit_evt
+1,5,fa2b8:rpg_snd_miss_evt
+1,5,fa380:rpg_attacking_evt
+1,5,fa858:rpg_use_pixls_evt
+1,5,fb380:rpg_use_items_evt
+1,5,fc7d8:rpg_run_away_evt
+1,5,fc9f0:underchomp_attack_1_evt
+1,5,fcd30:underchomp_attack_2_evt
+1,5,fd070:underchomp_attack_3_evt
+1,5,fd3b0:rpg_check_win_or_continue_evt
+1,5,fe150:final_rpg_child_evt
+1,5,fe1cc:begin_rpg_parent_evt
+// bss
+1,6,1320:an2_08_wp
 
 //an.c
 1,1,319ac:evt_an_init_tpl
 1,1,31bc8:evt_an_darkness_onoff
 1,1,31cb4:evt_an_remove_npcs
-// more
-
-//sp4_13.c
-1,1,16854:spReturnAngryAnimPos
-1,1,16a08:func_80c5c304
-1,1,16a70:func_80c5c36c
-1,5,a95f8:spMrLStartTribeAnimDefs
-1,5,a9600:spMrLTribeAnimDefs
-1,5,a96e8:spMrLTauntTribeAnimDefs
-1,5,a9788:spTheGreenThunderTribeAnimDefs
-1,5,a9b24:mr_l_appear_evt
-1,5,aa4a0:brobot_appear_evt
-// more
-
-// machi.c
-1,1,000052e4:evt_machi_set_elv_descs
 // more
 
 // dan.c

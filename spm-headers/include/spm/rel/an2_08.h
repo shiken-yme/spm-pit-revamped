@@ -14,7 +14,7 @@ typedef struct RpgNPC {
 /* 0x10 */ s32 unk_10;
 /* 0x14 */ s32 killXp;
 } RpgNPC;
-SIZE_ASSERT(RpgNPC, 0x18);
+SIZE_ASSERT(RpgNPC, 0x18)
 
 typedef struct RpgMenu {
 /* 0x00 */ const char * option_1;
@@ -31,7 +31,7 @@ typedef struct RpgMenu {
 /* 0x2c */ int unk_2c;
 /* 0x30 */ int unk_30;
 } RpgMenu;
-SIZE_ASSERT(RpgMenu, 0x34);
+SIZE_ASSERT(RpgMenu, 0x34)
 
 typedef struct An2_08Work {
 /* 0x00 */ s32 flags;
@@ -42,23 +42,23 @@ typedef struct An2_08Work {
 /* 0x58 */ s32 unk_58[15];
 /* 0x94 */ char unk_94[4];
 } An2_08Work; //sizeof 0x98
-SIZE_ASSERT(An2_08Work, 0x98);
+SIZE_ASSERT(An2_08Work, 0x98)
 
 DECOMP_STATIC(An2_08Work an2_08_wp)
 DECOMP_STATIC(const char * lbl_80def2c8[4])
 
-EVT_DECLARE(begin_rpg_parent_evt);
-EVT_DECLARE(final_rpg_child_evt);
-EVT_DECLARE(underchomp_attack_1_evt);
-EVT_DECLARE(underchomp_attack_2_evt);
-EVT_DECLARE(underchomp_attack_3_evt);
-EVT_DECLARE(rpg_check_win_or_continue_evt);
-EVT_DECLARE(rpg_attacking_evt);
-EVT_DECLARE(rpg_use_pixls_evt);
-EVT_DECLARE(rpg_use_items_evt);
-EVT_DECLARE(rpg_run_away_evt);
-EVT_DECLARE(rpg_snd_miss_evt);
-EVT_DECLARE(rpg_snd_hit_evt);
+EVT_DECLARE(begin_rpg_parent_evt)
+EVT_DECLARE(final_rpg_child_evt)
+EVT_DECLARE(underchomp_attack_1_evt)
+EVT_DECLARE(underchomp_attack_2_evt)
+EVT_DECLARE(underchomp_attack_3_evt)
+EVT_DECLARE(rpg_check_win_or_continue_evt)
+EVT_DECLARE(rpg_attacking_evt)
+EVT_DECLARE(rpg_use_pixls_evt)
+EVT_DECLARE(rpg_use_items_evt)
+EVT_DECLARE(rpg_run_away_evt)
+EVT_DECLARE(rpg_snd_miss_evt)
+EVT_DECLARE(rpg_snd_hit_evt)
 
 UNKNOWN_FUNCTION(func_80c6c908);
 u8 rpgHandleMenu(int param_1, RpgMenu * menu);
