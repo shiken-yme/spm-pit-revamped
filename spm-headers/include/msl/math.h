@@ -19,6 +19,8 @@ double fmod(double numer, double denom);
 double sqrt(double x);
 #define sqrtf(x) ((f32)sqrt(x))
 
+double pow(double base, double exponent);
+
 #define fabs(x) __fabs(x)
 #define fabsf(x) __fabsf(x)
 #define abs(x) __abs(x)
